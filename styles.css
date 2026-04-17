@@ -35,8 +35,14 @@ body {
 }
 
 article {
+  display: flex;
+  flex-direction: row; 
+  gap: 10px;
+  width: 60%;
+}
+
+.main {
   width: 100%;
-  max-width: 420px;
   background: var(--card);
   padding: 10px;
   border-radius: 20px;
@@ -100,8 +106,24 @@ p {
   color: var(--muted);
   font-size: 0.7rem;
   font-weight: 420;
-  margin-top: -5px;
-  margin-bottom: 18px;
+  margin-bottom: 28px;
+}
+
+.collapsed {
+  max-height: 40px;
+  overflow: hidden;
+  position: relative;
+  margin-top: -15px;
+}
+
+.collapsed::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 20px;
+  background: linear-gradient(to bottom, transparent, var(--card));
 }
 
 .task {
@@ -117,13 +139,16 @@ p {
 /* ── Badges ────────────────────────────────── */
 .row {
   position: absolute;
+  width: 80%;
   left: 50%;
   bottom: 0;
   transform: translate(-50%, 50%); 
   display: flex;
+  justify-content: center;
   gap: 6px;
   flex-wrap: wrap;
   z-index: 2;
+  margin: 0 auto
 }
 
 .badge {
@@ -134,11 +159,42 @@ p {
   white-space: nowrap;
 }
 
+.expand {
+  background: var(--muted);
+  color: var(--card);
+  border: 1.5px solid var(--card);
+}
+
+.low {
+  background: var(--success);
+  color: var(--successs);
+  border: 1.5px solid var(--card);
+}
+
+.medium {
+  background: var(--accent);
+  color: var(--accents);
+  border: 1.5px solid var(--card);
+}
+
 .high {
   background: var(--danger);
   color:  var(--dangers);
   border: 1.5px solid var(--card);
 }
+
+.priority-indicator {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  margin-bottom: -10px;
+  margin-left: -12px;
+  border: 1.5px solid var(--card);
+}
+
+.priority-indicator.low { background: var(--successs); }
+.priority-indicator.medium { background: var(--accents) }
+.priority-indicator.high { background: var(--dangers) }
 
 .status {
   background: var(--accent);
@@ -146,7 +202,25 @@ p {
   border: 1.5px solid var(--card);
 }
 
-.done {
+.status-display { 
+  background: var(--card);
+  color: var(--muted);
+  border: 1.5px solid var(--muted);
+}
+
+.status-pending {
+  background: var(--danger);
+  color: var(--dangers);
+  border: 1.5px solid var(--card);
+}
+
+.status-in-progress {
+  background: var(--accent);
+  color: var(--accents);
+  border: 1.5px solid var(--card);
+}
+
+.status-done {
   background: var(--success);
   color: var(--successs);
   border: 1.5px solid var(--card);
@@ -165,6 +239,13 @@ time {
   font-size: 0.6rem;
   font-weight: 500;
   color: var(--muted);
+  text-transform: lowercase;
+}
+
+.overdue {
+  color: red;
+  font-size: 0.6rem;
+  font-weight: 500;
   text-transform: lowercase;
 }
 
@@ -248,6 +329,54 @@ input[type="checkbox"]:checked {
   border-color: var(--muted); 
 }
 
+/* ── Edit form ────────────────────────────────────────────────── */
+.hidden {
+  display: none;
+}
+
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  background: var(--card);
+  padding: 20px 10px 10px 10px;
+  border-radius: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.forms {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 15px;
+}
+
+.forms label {
+  font-size: 0.6rem;
+  font-weight: 500;
+  color: var(--muted);
+  text-transform: capitalize;
+  margin-bottom: -8px;
+}
+
+.forms input,
+.forms textarea,
+.forms select {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: none;
+  background: var(--top);
+  font-size: 0.65rem;
+  font-family: 500;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
 /* ── Corners ────────────────────────────────────────────────── */
 .corner {
   position: fixed;
@@ -277,16 +406,23 @@ input[type="checkbox"]:checked {
 }
 
 /* ── Responsive ──────────────────────────────────────────────── */
-@media (max-width: 400px) {
+@media (max-width: 768px) {
   article {
-    padding: 15px;
+    width: 90%;
+  }
+
+  .actions {
+    flex-direction: column;
   }
 
   h2 {
     font-size: 1.2rem;
   }
+}
 
-  .actions {
-    flex-direction: column; 
+@media (max-width: 400px) {
+  article {
+    width: 100%;
+    padding: 10px;
   }
 }
